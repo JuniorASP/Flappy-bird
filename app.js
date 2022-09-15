@@ -8,6 +8,7 @@ document.addEventListener('DOMContentLoaded', () =>{
     let birdBottom = 100
     let gravity = 2
     let isGameOver = false
+    let gap = 430
 
     function startGame(){
         birdBottom -= gravity
@@ -31,6 +32,8 @@ document.addEventListener('DOMContentLoaded', () =>{
 
 
     }
+
+
     document.addEventListener('keyup', jump)
 
     function generateObstacle(){
@@ -38,21 +41,39 @@ document.addEventListener('DOMContentLoaded', () =>{
         let randomHeight = Math.random() * 60
         let obstacleBottom = randomHeight
         const obstacle = document.createElement('div')
-        if(!isGameOver) obstacle.classList.add('obstacle')
+        const top0bstacle = document.createElement('div')
+
+        if(!isGameOver){ obstacle.classList.add('obstacle')
+        top0bstacle.classList.add('top0bstacle')
+    }
+
         gameDisplay.appendChild(obstacle)
+        gameDisplay.appendChild(top0bstacle)
+
+        top0bstacle.style.left = obstacleLeft +'px'
+        top0bstacle.style.bottom = obstacleBottom  + gap+ 'px'
+
         obstacle.style.left= obstacleLeft + 'px'
         obstacle.style.bottom= obstacleBottom + 'px'
 
         function moveObstacle(){
             obstacleLeft -=2
+            top0bstacle.style.left = obstacleLeft + 'px'
             obstacle.style.left = obstacleLeft + 'px'
+            
 
             if(obstacleLeft === -60){
                 clearInterval(timerID)
                 gameDisplay.removeChild(obstacle)
+                gameDisplay.removeChild(top0bstacle)
             }
-            if(obstacleLeft > 200 && obstacleLeft < 280 && birdLeft === 220 ||
-                birdBottom === 0){
+
+            if(
+                obstacleLeft > 200 && obstacleLeft < 280 && birdLeft === 220 &&
+                (birdBottom < obstacleBottom + 153 || birdBottom > obstacleBottom + gap -200)||
+                birdBottom === 0 
+                ) {
+            
                 gameOver();
 
             }
@@ -69,8 +90,9 @@ function gameOver(){
     isGameOver = true
     document.removeEventListener('keyup', control)
     console.log('game over brooo !!!!')
+    
    
 }
 
-
+    
 })
